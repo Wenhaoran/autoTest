@@ -1,0 +1,69 @@
+
+需要注意的问题：
+
+1、click时间，没有延迟。但是，页面某些判定元素 ，执行js 方法，会有时间延迟。  比如，创建选题立项， 分类 tab 页，
+点击确认分类 按钮， 会执行 验证，判定 ，已选择分类，是否超过 两条，并且必须包含 中图分类法。
+这里的校验  js ，就会有延迟。   如果 在  保存分类后，立刻执行  确认分类，哪怕 数据是正确的， 也会提示 错误信息。
+
+
+2、 页面渲染列表，js自动创建的 列表，每次创建 ID 不同。所以，不能根据ID 来 定位元素。
+当前页面 ，<table id = '1' >   可能 ，再其他地方，同样有  创建 相同 table 的 相同的 js 方法，创建 的<table id = '2' >
+ 所以，需要在  F12 控制台 ，elements  中，删掉 ID， 重新 复制 出，不带有ID 的 xpath  来定位元素。
+
+
+3、
+在每个流程，点击保存并继续之后，都等待3秒，因为，流程继续后，会有（ 成功） 浮层 黑幕布。 需要等待 幕布消失。
+某一步骤 执行之后，有一层 黑幕布（成功） , 然后，如果脚本立刻执行点击按钮，会出错。需要设置等待时间。
+
+
+
+在一个 feature 中，执行多个 Scenario ，如果当前 Scenario 报错，会 继续执行下面的 Scenario ，全部执行完毕后，输出错误日志。
+
+每执行完成一个 Scenario ，都会重新执行 Background ，再执行下一个 Scenario。
+
+
+********************************
+操作时间空间    ，先点击  时间控件  ，出现浮层后，点击 时间空间输入框就可以了。
+点击时间空间，再随便点击任何一个地方，  input 都会 默认输入 当前时间。
+
+页面报错    alert   页面加载异常
+
+然后 ，测试 报错 ，这个错误是  JS 报错导致的。
+
+
+核红BUG ，如果选择社内核红，社外核红人员还是必填， 所以，如果选择社内核红，流程不能继续执行。
+
+
+
+
+需要完善的地方。
+1、 判断 待办理 的任务是否正确。  现在是根据任务名称，查询，然后选择第一个，没有对  project 进行验证判断，，，，因此，可能 办理的，是以前存在的任务。
+
+2、 没有加上 异常退出   ，就是，遇到某些错误，不影响测试的，会导致测试失败，但是不报错。。
+比如测试流程，
+点击 保存并继续    ，点击 保存并继续时，可能会有  页面必填字段校验  ，如果没有必填，会出现 请填写某某字段的 幕布浮层，  并且流程 不能继续办理 。  但是，测试用例却可以继续执行，因为没有进行 校验 是否成功 。
+点击 所有任务。
+
+
+
+
+
+
+
+
+
+
+ showSearchResultRefineInput : function(my) {
+ var currentPage = this;
+ var expireMessage = 'Search Result Refine Input was still not displayed when it should have appeared.'
+ my.driver.wait(function () {
+         return currentPage.searchResultRefineInput(my).isDisplayed().then(function (displayed) {
+             if (!displayed) return false;
+             return currentPage.searchResultRefineInput(my).isEnabled();
+         });
+     }, homePage.waitForTimeout() * 1000, expireMessage);
+ },
+ my.driver.findElement({ xpath :
+
+ div[contains(normalize-space(@class), \'class2\')] 或
+ div[contains(normalize-space(@style), \'style2: value2\')]
